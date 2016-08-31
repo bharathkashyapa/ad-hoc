@@ -46,7 +46,7 @@ def name_network():
 		return name
 def give_key():
 	key=raw_input("Enter a key whose length is greater than 9\n")
-	if len(key)<9 and len(key)>62:
+	if len(key)<9 or len(key)>62:
 		print("You have disobeyed rules , your key is : 'weakestpassword'")
 		return 'weakestpassword'
 	else:
@@ -54,5 +54,5 @@ def give_key():
 
 ssid= name_network()
 key=give_key()
-interface_name=get_interface_name
-ip=assign_ip
+interface_name=get_interface_name()
+ip=assign_ip(interface_name)

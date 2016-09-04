@@ -46,7 +46,7 @@ def connect_network(interface_name,ip):       #CAll all commands
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 	com="sudo iwconfig "+interface_name+" mode ad-hoc"
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
-	com="sudo iwconfig "+interface_name+" channel "+str(raw_input("Enter a channel no\n"))
+	com="sudo iwconfig "+interface_name+" channel "+(raw_input("Enter a channel no\n"))
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 	com="sudo iwconfig "+interface_name+" essid "+nw_name
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
@@ -56,7 +56,7 @@ def connect_network(interface_name,ip):       #CAll all commands
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 	com="sudo ip addr add "+ip+" dev "+interface_name
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
-                                
+        print("connected successfully")
 	        
 def display_nw(iname):
 	com="sudo iw dev "+iname+" scan "
@@ -69,7 +69,7 @@ def assign_ip(interface_name):  #assign ip 10.last 3 octets
 	x1=int(sp[3],16)
 	x2=int(sp[4],16)
 	x3=int(sp[5],16)
-	ip="10."+str(x1)+"."+str(x2)+"."+str(x3)+"/16"
+	ip="10."+str(x1)+"."+str(x2)+"."+str(x3)+"/24"
 	return ip
 #print assign_ip("wlan0")
 def ispresent(a,ll):

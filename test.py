@@ -20,6 +20,8 @@ def create_network(interface_name,ssid,key,ip): # Call all commands
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 	com="sudo ip addr add "+ip+" dev "+interface_name
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
+	com="ifconfig "+interface_name+" netmask 255.255.255.0"
+	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 	print "Created network with :",ssid,key,interface_name,ip
 def connect_network(interface_name,ip):       #CAll all commands
         #ip="169.254.34.2/16"

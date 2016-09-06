@@ -3,26 +3,28 @@ import datetime,time
 from random import randint
 
 def create_network(interface_name,ssid,key,ip): # Call all commands
-	print"Creating Network..."
+	print"Creating Network... please wait"
 	com="sudo service network-manager stop"
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
+	time.sleep(5)
 	com="sudo ip link set "+interface_name+" down"
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 	com="sudo iwconfig "+interface_name+" mode ad-hoc"
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
-	com="sudo iwconfig "+interface_name+" channel "+str(randint(1,12))#"5" raw_input("Enter a channel no")
+	channel_no=str(randint(1,12))
+	com="sudo iwconfig "+interface_name+" channel "+channel_no#"5" raw_input("Enter a channel no")
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 	com="sudo iwconfig "+interface_name+" essid "+ssid
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
-	com="sudo iwconfig "+interface_name+" key "+"1234567890"
+	com="sudo iwconfig "+interface_name+" key "+key#"1234567890"
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 	com="sudo ip link set "+interface_name+" up"
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
-	com="sudo ip addr add "+ip+" dev "+interface_name
+	com="sudo ip addr add "+ip+"/8 dev "+interface_name
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
-	com="ifconfig "+interface_name+" netmask 255.255.255.0"
-	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
-	print "Created network with :",ssid,key,interface_name,ip
+	#com="ifconfig "+interface_name+" netmask 255.255.255.0"
+	#subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
+	print "Created network with :",ssid,key,interface_name,ip,channel_no
 def connect_network(interface_name,ip):       #CAll all commands
         #ip="169.254.34.2/16"
 	com1=" sudo iwlist "+interface_name+" scan | grep ESSID > .wifinames.txt" # . is hidden file in Unix
@@ -56,7 +58,7 @@ def connect_network(interface_name,ip):       #CAll all commands
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 	com="sudo ip link set "+interface_name+" up"
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
-	com="sudo ip addr add "+ip+" dev "+interface_name
+	com="sudo ip addr add "+ip+"/8 dev "+interface_name
 	subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
         print("connected successfully")
 	        
@@ -71,7 +73,7 @@ def assign_ip(interface_name):  #assign ip 10.last 3 octets
 	x1=int(sp[3],16)
 	x2=int(sp[4],16)
 	x3=int(sp[5],16)
-	ip="10."+str(x1)+"."+str(x2)+"."+str(x3)+"/24"
+	ip="10."+str(x1)+"."+str(x2)+"."+str(x3)
 	return ip
 #print assign_ip("wlan0")
 def ispresent(a,ll):
@@ -117,9 +119,17 @@ def give_key():         #There is a problem with this works only length 10 keys
 		return "1234567890"
 	else:
 		return key 
+def give_key2():         #There is a problem with this works only length 10 keys
+	key=raw_input("Enter a key only containing only 0-9 whose length is 10\n")
+	if (len(key) is not 10) and (re.search('\D',key)==None):
+		print("You have disobeyed rules , your key is : 1234567890")
+		return "1234567890"
+	else:
+		return key 
 interface_name=get_interface_name()
 ip=assign_ip(interface_name)
 com="sudo service network-manager start"
+time.sleep(2)
 subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 time.sleep(2)
 display_nw(interface_name)
@@ -131,7 +141,7 @@ action=raw_input("Enter\n")
 if action=='1':
         print "Setting up an ad-hoc Network.."
 	ssid=name_network(interface_name)
-	key="1234567890"#give_key()
+	key=give_key2()
         create_network(interface_name,ssid,key,ip)
 elif action=='2':
 	connect_network(interface_name,ip)

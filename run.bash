@@ -6,7 +6,7 @@
 
 read -p "Go into network part? (y/n) " RESP1
 if [ "$RESP1" = "y" ]; then
-	python gittest.py
+	python test.py
 else
 	echo "..."
 fi

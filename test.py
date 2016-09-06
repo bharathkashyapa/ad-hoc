@@ -128,6 +128,8 @@ def give_key2():         #There is a problem with this works only length 10 keys
 		return key 
 interface_name=get_interface_name()
 ip=assign_ip(interface_name)
+com="sudo ip addr flush dev "+interface_name
+subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
 com="sudo service network-manager start"
 time.sleep(2)
 subprocess.call(com, stdin=None, stdout=None, stderr=None, shell=True)
@@ -148,6 +150,11 @@ elif action=='2':
 else:
 	print("invalid input,run this program again")
 	exit(0)
+what=raw_input( "Do you want to transfer a file? (y for yes)")
+if what=="y":
+        pass
+else:
+        exit(0)
 '''ssid= name_network()
 key=give_key()
 interface_name=get_interface_name()
